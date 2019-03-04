@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Bouncing Ball</title>
+
+</head>
+
+<body>
+
+	<div id="container" align="center">
+
+		<canvas id="myCanvas" width="480" height="320" style="background-color: black;"></canvas>
+	</div>
+	<script type="text/javascript">
+		var canvas = document.getElementById("myCanvas");
+		var ctx = canvas.getContext("2d");
+		var ballRadius = 10;
+		// starting position
+		var x = canvas.width / 2;
+		var y = canvas.height - 30;
+		//speeds
+		var dx = 2;
+		var dy = 2;
+		var paddleHeight = 10;
+		var paddleWidth = 75;
+		var paddleX = (canvas.width - paddleWidth) / 2;
+		var rPressed = false;
+		var lPressed = false;
+
+		var radian = Math.atan2(2, 2);
+		var angle = Math.atan2(2, 2) * 180 / Math.PI;
+		console.log(angle);
+
+		//var sy = 2 / Math.cos(radian);
+
+		//	console.log("new angle is : " +nan);
+		var zspeed = 2 / Math.cos(radian);
+		console.log("zspeed is :" + zspeed);
+
+		document.addEventListener("keydown", keyDownHandler, false);
+		document.addEventListener("keyup", keyUpHandler, false);
+
+		function keyDownHandler(e) {
+			if (e.keyCode == 39) {
+				rPressed = true;
+			}
+			else if (e.keyCode == 37) {
+				lPressed = true;
+			}
+		}
+		function keyUpHandler(e) {
+			if (e.keyCode == 39) {
+				rPressed = false;
+			}
+			else if (e.keyCode == 37) {
+				lPressed = false;
+			}
+		}
+		function drawBall() {
+			ctx.beginPath();
+			ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+			ctx.fillStyle = "red";
+			ctx.fill();
+			ctx.closePath()
+		}
+		function drawPaddle() {
+			ctx.beginPath();
+			ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+			ctx.fillStyle = "blue";
+			ctx.fill();
+			ctx.closePath();
+		}
+		function draw() {
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			drawBall();
+			drawPaddle();
+
+			//left wall and right wall
+			if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+				
+				var nan = angle + Math.random() * 100 + 1;
+				var nradian = nan * Math.PI / 180;
+				console.log("nradian is : " + nradian);
+				var nx = Math.cos(nradian) * zspeed;
+				dx = nx;
+				
+				
+				dx = -dx;
+			}
+			if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+				var nan = angle + Math.random() * 100+1;
+				var nradian = nan * Math.PI / 180;
+				console.log("nradian is : " + nradian);
+				var ny = Math.cos(nradian) * zspeed;
+				dy = ny;
+				dy = -dy;
+				//console.log("dy is : " + dy)
+		
+			}
+
+			if (rPressed && paddleX < canvas.width - paddleWidth) {
+				paddleX += 7;//paddle speed
+			}
+			else if (lPressed && paddleX > 0) {
+				paddleX -= 7;//paddle speed;
+			}
+
+			x += dx;
+
+			y += dy;
+			console.log("y is : "+ y);
+		}
+		setInterval(draw, 10); 
+	</script>
+</body>
+
+</html>
